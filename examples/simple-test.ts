@@ -42,6 +42,6 @@ console.log('✅ createDeployment input structure valid');
 console.log('✅ updateDeployment input structure valid');
 console.log('\nThe TypeScript client is ready to use!');
 console.log('\nTo make actual API calls:');
-console.log('1. Run: slot auth login');
+console.log('1. Run: slot auth token');
 console.log('2. Set your auth token in the client configuration');
 console.log('3. Use the client methods to interact with the API');

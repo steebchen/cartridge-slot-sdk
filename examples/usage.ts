@@ -4,7 +4,7 @@ import { SlotClient, DeploymentTier } from '../src';
  * Example usage of the Slot TypeScript client
  *
  * Before running:
- * 1. Run `slot auth login` to get your auth token
+ * 1. Run `slot auth token` to get your auth token
  * 2. Set your auth token in the client configuration
  */
 

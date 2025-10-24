@@ -5,7 +5,7 @@ TypeScript client for the Cartridge Slot GraphQL API with full type safety.
 ## Installation
 
 ```bash
-pnpm install
+pnpm add cartridge-slot-sdk
 ```
 
 ## Setup
@@ -23,7 +23,7 @@ pnpm build
 ## Usage
 
 ```typescript
-import { SlotClient, DeploymentTier } from '@cartridge/slot-client';
+import { SlotClient, DeploymentTier } from 'cartridge-slot-sdk';
 
 // Initialize the client
 const client = new SlotClient({
@@ -71,7 +71,7 @@ console.log('Deployment updated:', updated.version);
 new SlotClient(config: SlotClientConfig)
 ```
 
-- `config.authToken` (required): Authentication token from `slot auth login`
+- `config.authToken` (required): Authentication token from `slot auth token`
 - `config.apiUrl` (optional): API endpoint URL (defaults to https://api.cartridge.gg/query)
 
 #### Methods

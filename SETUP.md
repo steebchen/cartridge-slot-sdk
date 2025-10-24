@@ -68,7 +68,7 @@ Validates that all types are correct and the client structure works.
 ### Run examples
 
 ```bash
-# Set your auth token (get it from: slot auth login)
+# Set your auth token (get it from: slot auth token)
 export SLOT_AUTH_TOKEN="your-token-here"
 
 # Run the usage example
@@ -80,7 +80,7 @@ pnpm example
 ### Basic Example
 
 ```typescript
-import { SlotClient, DeploymentTier } from '@cartridge/slot-client';
+import { SlotClient, DeploymentTier } from 'cartridge-slot-sdk';
 
 const client = new SlotClient({
   authToken: 'your-auth-token',
@@ -184,7 +184,7 @@ The package has been tested and verified to:
 
 ## Next Steps
 
-1. Get your auth token: `slot auth login`
+1. Get your auth token: `slot auth token`
 2. Set the token in your code or environment variable
 3. Use the client to create and manage deployments
 4. Refer to `examples/usage.ts` for more examples
