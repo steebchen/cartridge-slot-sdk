@@ -6,7 +6,7 @@ This package provides a fully typed TypeScript client for the Cartridge Slot Gra
 
 - ✅ Full TypeScript type safety
 - ✅ GraphQL schema validation (no runtime errors)
-- ✅ Auto-generated types from `slot/schema.json`
+- ✅ Auto-generated types from remote schema
 - ✅ Simple, clean API for `createDeployment` and `updateDeployment`
 
 ## Project Structure
@@ -47,7 +47,7 @@ This will automatically:
 pnpm generate
 ```
 
-This reads `../slot/schema.json` and generates TypeScript types in `src/generated/`.
+This fetches the schema from `https://raw.githubusercontent.com/cartridge-gg/slot/refs/heads/main/slot/schema.json` and generates TypeScript types in `src/generated/`.
 
 ### Build the project
 
@@ -176,7 +176,7 @@ All types are auto-generated from the GraphQL schema, ensuring:
 
 The package has been tested and verified to:
 
-- ✅ Generate types successfully from `slot/schema.json`
+- ✅ Generate types successfully from the remote schema
 - ✅ Build without TypeScript errors
 - ✅ Include proper GraphQL operations for `createDeployment` and `updateDeployment`
 - ✅ Pass type checking for all exported functions
@@ -193,8 +193,7 @@ The package has been tested and verified to:
 
 If the GraphQL schema changes:
 
-1. Update `slot/schema.json` using: `./scripts/pull_schema.sh`
-2. Regenerate types: `cd js && pnpm generate`
-3. Rebuild: `pnpm build`
+1. Regenerate types: `pnpm generate` (automatically fetches the latest schema from GitHub)
+2. Rebuild: `pnpm build`
 
 The type system will automatically catch any breaking changes!

@@ -10,10 +10,10 @@ pnpm install
 
 ## Setup
 
-The package uses GraphQL Code Generator to create types from the schema:
+The package uses GraphQL Code Generator to create types from the remote schema:
 
 ```bash
-# Generate types from schema.json
+# Generate types from remote schema
 pnpm generate
 
 # Build the TypeScript code
