@@ -16,9 +16,7 @@ const createDeploymentInput = {
   tier: DeploymentTier.Basic,
   service: {
     katana: {
-      blockTime: 1000,
-      accounts: 10,
-      disableFee: true,
+      config: `chain_id = "mykatana"`
     },
   },
   wait: true,
@@ -30,7 +28,7 @@ const updateDeploymentInput = {
   project: 'test-project',
   service: {
     katana: {
-      blockTime: 2000,
+      config: `chain_id = "mykatana"`,
     },
   },
   tier: DeploymentTier.Pro,

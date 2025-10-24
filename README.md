@@ -8,6 +8,9 @@ Unofficial TypeScript client for the Cartridge Slot GraphQL API with full type s
 npm i cartridge-slot-sdk
 ```
 
+## Examples
+
+Check out the [usage example](./examples/usage.ts) to get started.
 
 ## Usage
 
@@ -23,7 +26,7 @@ const client = new SlotClient({
 // Create a Katana deployment
 const deployment = await client.createDeployment({
   project: 'my-project',
-  tier: DeploymentTier.BASIC,
+  tier: DeploymentTier.Basic,
   service: {
     katana: {
       blockTime: 1000,
@@ -36,6 +39,21 @@ const deployment = await client.createDeployment({
 
 console.log('Deployment created:', deployment.id);
 
+// Create a Torii deployment
+const toriiDeployment = await client.createDeployment({
+  project: 'my-torii-project',
+  tier: DeploymentTier.Hobby,
+  service: {
+    torii: {
+      config: `world_address = "0x585a28495ca41bece7640b0ccf2eff199ebe70cc381fa73cb34cc5721614fbd"
+rpc = "https://api.cartridge.gg/x/starknet/sepolia"`,
+    },
+  },
+  wait: true,
+});
+
+console.log('Torii Deployment created:', toriiDeployment.id);
+
 // Update a deployment
 const updated = await client.updateDeployment({
   project: 'my-project',
@@ -44,7 +62,7 @@ const updated = await client.updateDeployment({
       blockTime: 2000
     }
   },
-  tier: DeploymentTier.PRO
+  tier: DeploymentTier.Pro
 });
 
 console.log('Deployment updated:', updated.version);

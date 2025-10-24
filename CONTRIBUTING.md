@@ -14,4 +14,7 @@ pnpm generate
 
 # Build the TypeScript code
 pnpm build
+
+# Run the example script
+pnpm example
 ```
