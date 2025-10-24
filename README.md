@@ -23,18 +23,18 @@ const client = new SlotClient({
   apiUrl: 'https://api.cartridge.gg/query' // optional
 });
 
+
 // Create a Katana deployment
 const deployment = await client.createDeployment({
   project: 'my-project',
+  team: process.env.SLOT_TEAM || 'my-team',
   tier: DeploymentTier.Basic,
+  wait: true,
   service: {
     katana: {
-      blockTime: 1000,
-      accounts: 10,
-      disableFee: true
-    }
+      config: `chain_id = "mykatana"`,
+    },
   },
-  wait: true
 });
 
 console.log('Deployment created:', deployment.id);
@@ -42,14 +42,15 @@ console.log('Deployment created:', deployment.id);
 // Create a Torii deployment
 const toriiDeployment = await client.createDeployment({
   project: 'my-torii-project',
-  tier: DeploymentTier.Hobby,
+  team: process.env.SLOT_TEAM || 'my-team',
+  tier: DeploymentTier.Basic,
+  wait: true,
   service: {
     torii: {
       config: `world_address = "0x585a28495ca41bece7640b0ccf2eff199ebe70cc381fa73cb34cc5721614fbd"
 rpc = "https://api.cartridge.gg/x/starknet/sepolia"`,
     },
   },
-  wait: true,
 });
 
 console.log('Torii Deployment created:', toriiDeployment.id);
@@ -57,12 +58,12 @@ console.log('Torii Deployment created:', toriiDeployment.id);
 // Update a deployment
 const updated = await client.updateDeployment({
   project: 'my-project',
+  tier: DeploymentTier.Pro,
   service: {
     katana: {
-      blockTime: 2000
+      config: `chain_id = "mykatana-updated"`,
     }
   },
-  tier: DeploymentTier.Pro
 });
 
 console.log('Deployment updated:', updated.version);
@@ -90,7 +91,7 @@ Create a new Katana or Torii deployment.
 Parameters:
 - `project`: Deployment name
 - `service`: Service configuration (katana or torii)
-- `tier`: Deployment tier (BASIC, HOBBY, PRO, EPIC)
+- `tier`: Deployment tier (Basic, Pro, Epic, Legendary)
 - `wait` (optional): Wait for deployment to be ready
 - `regions` (optional): Deployment regions
 - `team` (optional): Team name
@@ -104,43 +105,3 @@ Parameters:
 - `service`: Service configuration to update
 - `tier` (optional): New deployment tier
 - `wait` (optional): Wait for update to complete
-
-## Types
-
-### `KatanaConfig`
-
-```typescript
-{
-  blockTime?: number;
-  forkRpcUrl?: string;
-  forkBlockNumber?: number;
-  accounts?: number;
-  disableFee?: boolean;
-  seed?: string;
-  maxSteps?: number;
-}
-```
-
-### `ToriiConfig`
-
-```typescript
-{
-  worldAddress: string;
-  rpc: string;
-  startBlock?: number;
-  indexPending?: boolean;
-  indexTransactions?: boolean;
-  indexRawEvents?: boolean;
-}
-```
-
-### `DeploymentTier`
-
-```typescript
-enum DeploymentTier {
-  BASIC = 'BASIC',
-  HOBBY = 'HOBBY',
-  PRO = 'PRO',
-  EPIC = 'EPIC'
-}
-```
