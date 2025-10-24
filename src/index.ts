@@ -5,8 +5,6 @@ export type {
   UpdateDeploymentInput,
   CreateServiceInput,
   UpdateServiceInput,
-  KatanaConfig,
-  ToriiConfig,
   DeploymentResponse,
 } from './client';
-export { DeploymentTier } from './client';
+export { DeploymentTier } from './generated/graphql';

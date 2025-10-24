@@ -1,6 +1,6 @@
-# Cartridge Slot TypeScript Client
+# Cartridge Slot TypeScript SDK
 
-TypeScript client for the Cartridge Slot GraphQL API with full type safety.
+Unofficial TypeScript client for the Cartridge Slot GraphQL API with full type safety.
 
 ## Installation
 

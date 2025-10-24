@@ -11,7 +11,7 @@ import { SlotClient, DeploymentTier } from '../src';
 async function main() {
   // Initialize the client with your auth token
   const client = new SlotClient({
-    authToken: process.env.SLOT_AUTH_TOKEN || 'your-auth-token-here',
+    authToken: process.env.SLOT_AUTH_TOKEN || '',
     // apiUrl: 'https://api.cartridge.gg/query', // optional - this is the default
   });
 
@@ -20,40 +20,33 @@ async function main() {
     console.log('Creating Katana deployment...');
     const katanaDeployment = await client.createDeployment({
       project: 'my-katana-project',
-      tier: DeploymentTier.BASIC,
+      tier: DeploymentTier.Basic,
       service: {
         katana: {
-          blockTime: 1000, // 1 second block time
-          accounts: 10, // Pre-deploy 10 accounts
-          disableFee: true, // Disable transaction fees
-          seed: 'my-seed', // Optional seed for deterministic accounts
+          config: `chain_id = "mykatana"`,
         },
       },
+      team: process.env.SLOT_TEAM || 'my-team',
       wait: true, // Wait for deployment to be ready
-      regions: ['us-east-1'], // Optional: specify regions
+      regions: ['us-east'], // Optional: specify regions
     });
 
     console.log('Katana deployment created:');
     console.log('  ID:', katanaDeployment.id);
     console.log('  Version:', katanaDeployment.version);
-    console.log('  Type:', katanaDeployment.__typename);
 
     // Example 2: Create a Torii deployment
     console.log('\nCreating Torii deployment...');
     const toriiDeployment = await client.createDeployment({
       project: 'my-torii-project',
-      tier: DeploymentTier.HOBBY,
+      tier: DeploymentTier.Basic,
       service: {
         torii: {
-          worldAddress: '0x1234567890abcdef1234567890abcdef12345678',
-          rpc: 'https://api.cartridge.gg/x/my-katana-project/katana',
-          startBlock: 0,
-          indexPending: true,
-          indexTransactions: true,
-          indexRawEvents: false,
+          config: `world_address = "0x585a28495ca41bece7640b0ccf2eff199ebe70cc381fa73cb34cc5721614fbd"
+rpc = "https://api.cartridge.gg/x/starknet/sepolia"`,
         },
       },
-      team: 'my-team', // Optional: deploy to a team
+      team: process.env.SLOT_TEAM || 'my-team',
       wait: true,
     });
 
@@ -67,11 +60,10 @@ async function main() {
       project: 'my-katana-project',
       service: {
         katana: {
-          blockTime: 2000, // Change block time to 2 seconds
-          accounts: 20, // Increase accounts
+          config: `chain_id = "mykatana-updated"`,
         },
       },
-      tier: DeploymentTier.PRO, // Upgrade tier
+      tier: DeploymentTier.Pro, // Upgrade tier
       wait: true,
     });
 
@@ -79,6 +71,16 @@ async function main() {
     console.log('  ID:', updatedDeployment.id);
     console.log('  Version:', updatedDeployment.version);
     console.log('  Config:', updatedDeployment.config.configFile);
+
+    // Example 4: Delete the Katana deployment
+    console.log('\nDeleting Katana deployment...');
+    const katanaDeleted = await client.deleteDeployment('my-katana-project', 'katana');
+    console.log('Katana deployment deleted:', katanaDeleted);
+
+    // Example 5: Delete the Torii deployment
+    console.log('\nDeleting Torii deployment...');
+    const toriiDeleted = await client.deleteDeployment('my-torii-project', 'torii');
+    console.log('Torii deployment deleted:', toriiDeleted);
 
   } catch (error) {
     console.error('Error:', error);

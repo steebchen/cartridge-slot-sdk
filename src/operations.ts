@@ -49,3 +49,15 @@ export const UPDATE_DEPLOYMENT = gql`
     }
   }
 `;
+
+export const DELETE_DEPLOYMENT = gql`
+  mutation DeleteDeployment(
+    $name: String!
+    $service: DeploymentService!
+  ) {
+    deleteDeployment(
+      name: $name
+      service: $service
+    )
+  }
+`;

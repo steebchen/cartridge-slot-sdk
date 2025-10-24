@@ -1,5 +1,6 @@
 import { GraphQLClient } from 'graphql-request';
-import { CREATE_DEPLOYMENT, UPDATE_DEPLOYMENT } from './operations';
+import { CREATE_DEPLOYMENT, UPDATE_DEPLOYMENT, DELETE_DEPLOYMENT } from './operations';
+import { DeploymentService, DeploymentTier } from './generated/graphql';
 
 export interface SlotClientConfig {
   apiUrl?: string;
@@ -12,7 +13,7 @@ export interface CreateDeploymentInput {
   tier: DeploymentTier;
   wait?: boolean;
   regions?: string[];
-  team?: string;
+  team: string;
 }
 
 export interface UpdateDeploymentInput {
@@ -23,39 +24,21 @@ export interface UpdateDeploymentInput {
 }
 
 export interface CreateServiceInput {
-  katana?: KatanaConfig;
-  torii?: ToriiConfig;
+  katana?: {
+    config: string; // TOML config string
+  };
+  torii?: {
+    config: string; // TOML config string
+  };
 }
 
 export interface UpdateServiceInput {
-  katana?: KatanaConfig;
-  torii?: ToriiConfig;
-}
-
-export interface KatanaConfig {
-  blockTime?: number;
-  forkRpcUrl?: string;
-  forkBlockNumber?: number;
-  accounts?: number;
-  disableFee?: boolean;
-  seed?: string;
-  maxSteps?: number;
-}
-
-export interface ToriiConfig {
-  worldAddress: string;
-  rpc: string;
-  startBlock?: number;
-  indexPending?: boolean;
-  indexTransactions?: boolean;
-  indexRawEvents?: boolean;
-}
-
-export enum DeploymentTier {
-  BASIC = 'BASIC',
-  HOBBY = 'HOBBY',
-  PRO = 'PRO',
-  EPIC = 'EPIC'
+  katana?: {
+    config: string; // TOML config string
+  };
+  torii?: {
+    config: string; // TOML config string
+  };
 }
 
 export interface DeploymentResponse {
@@ -89,14 +72,62 @@ export class SlotClient {
   }
 
   /**
+   * Base64 encode a string
+   */
+  private base64Encode(str: string): string {
+    return Buffer.from(str).toString('base64');
+  }
+
+  /**
+   * Prepare service input for GraphQL mutation
+   */
+  private prepareServiceInput(service: CreateServiceInput): { type: DeploymentService; config: string; katana?: any; torii?: any } {
+    if (service.katana) {
+      return {
+        type: DeploymentService.Katana,
+        config: this.base64Encode(service.katana.config),
+        katana: {},
+      };
+    } else if (service.torii) {
+      return {
+        type: DeploymentService.Torii,
+        config: this.base64Encode(service.torii.config),
+        torii: {},
+      };
+    }
+    throw new Error('Service must specify either katana or torii configuration');
+  }
+
+  /**
+   * Prepare update service input for GraphQL mutation
+   */
+  private prepareUpdateServiceInput(service: UpdateServiceInput): { type: DeploymentService; config?: string; torii?: any } {
+    if (service.katana) {
+      return {
+        type: DeploymentService.Katana,
+        config: this.base64Encode(service.katana.config),
+      };
+    } else if (service.torii) {
+      return {
+        type: DeploymentService.Torii,
+        config: this.base64Encode(service.torii.config),
+        torii: {},
+      };
+    }
+    throw new Error('Service must specify either katana or torii configuration');
+  }
+
+  /**
    * Create a new deployment (Katana or Torii service)
    */
   async createDeployment(input: CreateDeploymentInput): Promise<DeploymentResponse> {
+    const preparedService = this.prepareServiceInput(input.service);
+
     const response = await this.client.request<CreateDeploymentResponse>(
       CREATE_DEPLOYMENT,
       {
         project: input.project,
-        service: input.service,
+        service: preparedService,
         tier: input.tier,
         wait: input.wait,
         regions: input.regions,
@@ -111,16 +142,35 @@ export class SlotClient {
    * Update an existing deployment
    */
   async updateDeployment(input: UpdateDeploymentInput): Promise<DeploymentResponse> {
+    const preparedService = this.prepareUpdateServiceInput(input.service);
+
     const response = await this.client.request<UpdateDeploymentResponse>(
       UPDATE_DEPLOYMENT,
       {
         project: input.project,
-        service: input.service,
+        service: preparedService,
         tier: input.tier,
         wait: input.wait,
       }
     );
 
     return response.updateDeployment;
+  }
+
+  /**
+   * Delete an existing deployment
+   */
+  async deleteDeployment(project: string, service: 'katana' | 'torii'): Promise<boolean> {
+    const serviceType = service === 'katana' ? DeploymentService.Katana : DeploymentService.Torii;
+
+    const response = await this.client.request<{ deleteDeployment: boolean }>(
+      DELETE_DEPLOYMENT,
+      {
+        name: project,
+        service: serviceType,
+      }
+    );
+
+    return response.deleteDeployment;
   }
 }
