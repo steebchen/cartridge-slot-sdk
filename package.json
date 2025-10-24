@@ -1,0 +1,34 @@
+{
+  "name": "cartridge-slot-client",
+  "version": "0.0.0",
+  "description": "TypeScript client for Cartridge Slot GraphQL API",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "generate": "graphql-codegen --config codegen.ts",
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prepare": "pnpm generate && pnpm build",
+    "test": "ts-node examples/simple-test.ts",
+    "example": "ts-node examples/usage.ts"
+  },
+  "keywords": ["cartridge", "slot", "graphql"],
+  "author": "Cartridge",
+  "license": "MIT",
+  "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/client-preset": "^4.1.0",
+    "@graphql-codegen/typescript": "^4.0.1",
+    "@graphql-codegen/typescript-operations": "^4.0.1",
+    "@graphql-codegen/typescript-graphql-request": "^6.0.1",
+    "@types/node": "^20.10.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {
+    "@graphql-typed-document-node/core": "^3.2.0",
+    "graphql": "^16.8.1",
+    "graphql-request": "^6.1.0",
+    "graphql-tag": "^2.12.6"
+  }
+}
