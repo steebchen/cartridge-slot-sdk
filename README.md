@@ -5,20 +5,9 @@ Unofficial TypeScript client for the Cartridge Slot GraphQL API with full type s
 ## Installation
 
 ```bash
-pnpm add cartridge-slot-sdk
+npm i cartridge-slot-sdk
 ```
 
-## Setup
-
-The package uses GraphQL Code Generator to create types from the remote schema:
-
-```bash
-# Generate types from remote schema
-pnpm generate
-
-# Build the TypeScript code
-pnpm build
-```
 
 ## Usage
 

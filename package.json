@@ -7,7 +7,7 @@
   "scripts": {
     "download-schema": "node scripts/download-schema.js",
     "generate": "pnpm download-schema && graphql-codegen --config codegen.ts",
-    "build": "tsc",
+    "build": "pnpm generate && tsc",
     "dev": "tsc --watch",
     "prepare": "pnpm generate && pnpm build",
     "test": "ts-node examples/simple-test.ts",

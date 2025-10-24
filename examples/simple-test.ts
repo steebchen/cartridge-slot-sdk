@@ -13,7 +13,7 @@ const client = new SlotClient({
 // Verify createDeployment signature
 const createDeploymentInput = {
   project: 'test-project',
-  tier: DeploymentTier.BASIC,
+  tier: DeploymentTier.Basic,
   service: {
     katana: {
       blockTime: 1000,
@@ -33,7 +33,7 @@ const updateDeploymentInput = {
       blockTime: 2000,
     },
   },
-  tier: DeploymentTier.PRO,
+  tier: DeploymentTier.Pro,
 };
 
 console.log('✅ Type checking passed!');
