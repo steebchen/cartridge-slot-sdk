@@ -19,6 +19,9 @@
     "slot",
     "graphql"
   ],
+	"files": [
+		"dist"
+	],
   "author": "Cartridge",
   "license": "MIT",
   "devDependencies": {
