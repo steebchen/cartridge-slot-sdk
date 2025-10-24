@@ -72,10 +72,18 @@ export class SlotClient {
   }
 
   /**
-   * Base64 encode a string
+   * Base64 encode a string (works in both browser and Node.js)
    */
   private base64Encode(str: string): string {
-    return Buffer.from(str).toString('base64');
+    // Check if we're in a browser environment
+    if (typeof btoa !== 'undefined') {
+      return btoa(str);
+    }
+    // Fall back to Node.js Buffer if btoa is not available
+    if (typeof Buffer !== 'undefined') {
+      return Buffer.from(str).toString('base64');
+    }
+    throw new Error('No base64 encoding method available');
   }
 
   /**

@@ -10,8 +10,8 @@
     "build": "pnpm generate && tsc",
     "dev": "tsc --watch",
     "prepare": "pnpm generate && pnpm build",
-    "test": "ts-node examples/simple-test.ts",
-    "example": "ts-node examples/usage.ts"
+    "test": "ts-node --project tsconfig.node.json examples/simple-test.ts",
+    "example": "ts-node --project tsconfig.node.json examples/usage.ts"
   },
   "keywords": [
     "dojo",
